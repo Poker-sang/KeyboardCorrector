@@ -1,4 +1,0 @@
-C:\WorkSpace\KeyboardCorrector\KeyboardCorrector\Debug\KeyboardCorrector.vcxproj.AssemblyReference.cache
-C:\WorkSpace\KeyboardCorrector\KeyboardCorrector\Debug\KeyboardCorrector.vcxproj.SuggestedBindingRedirects.cache
-C:\Users\poker\Desktop\KeyboardCorrector\KeyboardCorrector\Debug\KeyboardCorrector.vcxproj.AssemblyReference.cache
-C:\Users\poker\Desktop\KeyboardCorrector\KeyboardCorrector\Debug\KeyboardCorrector.vcxproj.SuggestedBindingRedirects.cache
