@@ -1,20 +1,22 @@
 #include <Windows.h> 
 
-#define IsKeyPressed(nVirtKey) ((GetKeyState(nVirtKey) & (1<<(sizeof(SHORT)*8-1))) != 0)
-#define IsKeyNotPressed(nVirtKey) ((GetKeyState(nVirtKey) & (1<<(sizeof(SHORT)*8-1))) == 0)
-#define KBE(index) keybd_event(newKey[index], 0, 0x0000, 1 << 24)
+inline auto IsKeyPressed(const int nVirtualKey) { return (GetKeyState(nVirtualKey) & (1 << (sizeof(SHORT) * 8 - 1))) != 0; }
 
-#define _11 VK_OEM_3
-#define _12 VK_OEM_MINUS
-#define _13 VK_OEM_PLUS
-#define _21 VK_OEM_4
-#define _22 VK_OEM_6
-#define _23 VK_OEM_5
-#define _31 VK_OEM_1
-#define _32 VK_OEM_7
-#define _41 VK_OEM_COMMA
-#define _42 VK_OEM_PERIOD
-#define _43 VK_OEM_2
+inline auto Kbe(const int index) { keybd_event(KeyboardLayoutList[KeyboardLayoutIndex][index], 0, 0x0000, 1 << 24); }
+
+#pragma region 某些键盘上符号的虚拟键代码
+constexpr auto _11 = VK_OEM_3;
+constexpr auto _12 = VK_OEM_MINUS;
+constexpr auto _13 = VK_OEM_PLUS;
+constexpr auto _21 = VK_OEM_4;
+constexpr auto _22 = VK_OEM_6;
+constexpr auto _23 = VK_OEM_5;
+constexpr auto _31 = VK_OEM_1;
+constexpr auto _32 = VK_OEM_7;
+constexpr auto _41 = VK_OEM_COMMA;
+constexpr auto _42 = VK_OEM_PERIOD;
+constexpr auto _43 = VK_OEM_2;
+#pragma endregion
 
 static HHOOK keyboardHook = nullptr;
 
@@ -81,70 +83,74 @@ inline void installDvorakKB()
 
 LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
-	auto* p = reinterpret_cast<PKBDLLHOOKSTRUCT>(lParam);
+	auto p = reinterpret_cast<PKBDLLHOOKSTRUCT>(lParam);
 	bool tempFlag = false;
 	if (wParam == WM_KEYDOWN)
 	{
 		if (IsKeyPressed(VK_CONTROL) && IsKeyPressed(VK_SHIFT) && IsKeyPressed('Q'))
+		{
+			if(keyboardHook != nullptr)
+				UnhookWindowsHookEx(keyboardHook);
 			PostQuitMessage(0);
+		}
 		else if (p->dwExtraInfo != 1 << 24 &&
-			IsKeyNotPressed(VK_CONTROL) &&
-			IsKeyNotPressed(VK_LWIN) &&
-			IsKeyNotPressed(VK_RWIN) &&
-			IsKeyNotPressed(VK_MENU) &&
-			IsKeyNotPressed(VK_TAB)) {
+			!IsKeyPressed(VK_CONTROL) &&
+			!IsKeyPressed(VK_LWIN) &&
+			!IsKeyPressed(VK_RWIN) &&
+			!IsKeyPressed(VK_MENU) &&
+			!IsKeyPressed(VK_TAB)) {
 			tempFlag = true;
 			switch (p->vkCode)
 			{
-			case _11:KBE(0); break;
-			case '1':KBE(1); break;
-			case '2':KBE(2); break;
-			case '3':KBE(3); break;
-			case '4':KBE(4); break;
-			case '5':KBE(5); break;
-			case '6':KBE(6); break;
-			case '7':KBE(7); break;
-			case '8':KBE(8); break;
-			case '9':KBE(9); break;
-			case '0':KBE(10); break;
-			case _12:KBE(11); break;
-			case _13:KBE(12); break;
+			case _11:Kbe(0); break;
+			case '1':Kbe(1); break;
+			case '2':Kbe(2); break;
+			case '3':Kbe(3); break;
+			case '4':Kbe(4); break;
+			case '5':Kbe(5); break;
+			case '6':Kbe(6); break;
+			case '7':Kbe(7); break;
+			case '8':Kbe(8); break;
+			case '9':Kbe(9); break;
+			case '0':Kbe(10); break;
+			case _12:Kbe(11); break;
+			case _13:Kbe(12); break;
 
-			case 'Q':KBE(13); break;
-			case 'W':KBE(14); break;
-			case 'E':KBE(15); break;
-			case 'T':KBE(17); break;
-			case 'Y':KBE(18); break;
-			case 'U':KBE(19); break;
-			case 'I':KBE(20); break;
-			case 'O':KBE(21); break;
-			case 'P':KBE(22); break;
-			case _21:KBE(23); break;
-			case _22:KBE(24); break;
-			case _23:KBE(25); break;
+			case 'Q':Kbe(13); break;
+			case 'W':Kbe(14); break;
+			case 'E':Kbe(15); break;
+			case 'T':Kbe(17); break;
+			case 'Y':Kbe(18); break;
+			case 'U':Kbe(19); break;
+			case 'I':Kbe(20); break;
+			case 'O':Kbe(21); break;
+			case 'P':Kbe(22); break;
+			case _21:Kbe(23); break;
+			case _22:Kbe(24); break;
+			case _23:Kbe(25); break;
 
-			case 'A':KBE(26); break;
-			case 'S':KBE(27); break;
-			case 'D':KBE(28); break;
-			case 'F':KBE(29); break;
-			case 'G':KBE(30); break;
-			case 'H':KBE(31); break;
-			case 'J':KBE(32); break;
-			case 'K':KBE(33); break;
-			case 'L':KBE(34); break;
-			case _31:KBE(35); break;
-			case _32:KBE(36); break;
+			case 'A':Kbe(26); break;
+			case 'S':Kbe(27); break;
+			case 'D':Kbe(28); break;
+			case 'F':Kbe(29); break;
+			case 'G':Kbe(30); break;
+			case 'H':Kbe(31); break;
+			case 'J':Kbe(32); break;
+			case 'K':Kbe(33); break;
+			case 'L':Kbe(34); break;
+			case _31:Kbe(35); break;
+			case _32:Kbe(36); break;
 
-			case 'Z':KBE(37); break;
-			case 'X':KBE(38); break;
-			case 'C':KBE(39); break;
-			case 'V':KBE(40); break;
-			case 'B':KBE(41); break;
-			case 'N':KBE(42); break;
-			case 'M':KBE(43); break;
-			case _41:KBE(44); break;
-			case _42:KBE(45); break;
-			case _43:KBE(46); break;
+			case 'Z':Kbe(37); break;
+			case 'X':Kbe(38); break;
+			case 'C':Kbe(39); break;
+			case 'V':Kbe(40); break;
+			case 'B':Kbe(41); break;
+			case 'N':Kbe(42); break;
+			case 'M':Kbe(43); break;
+			case _41:Kbe(44); break;
+			case _42:Kbe(45); break;
+			case _43:Kbe(46); break;
 			default:
 				tempFlag = false;
 				break;
@@ -160,15 +166,15 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPreINstance, _I
 {
 	//安装键盘钩子
 	installDvorakKB();
-	keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, &KeyboardProc, hInstance, NULL);
+	keyboardHook = SetWindowsHookExW(WH_KEYBOARD_LL, &KeyboardProc, hInstance, NULL);
 	if (keyboardHook == nullptr)
 		return 1;
 	//进行事件循环
 	MSG msg;
-	while (GetMessage(&msg, nullptr, 0, 0))
+	while (GetMessageA(&msg, nullptr, 0, 0))
 	{
 		TranslateMessage(&msg);
-		DispatchMessage(&msg);
+		DispatchMessageA(&msg);
 	}
 	return msg.wParam;
 }
