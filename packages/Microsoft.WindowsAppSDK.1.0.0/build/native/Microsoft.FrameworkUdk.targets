@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  Copyright (c) Microsoft Corporation. Licensed under the MIT License
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- NOTE: See CompInproc.targets file why we use 'Condition' attribute for multiple .nupkg
+    support. We need to define 'Ixp-Arch' first to determine the directory. -->
+
+  <!-- Include the common .targets file that isn't native-specific -->
+  <Import Project="$(MSBuildThisFileDirectory)../Microsoft.FrameworkUdk.common.targets"/>
+
+  <!-- Native C++ projects -->
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <!-- C++ header files are in "include" -->
+      <AdditionalIncludeDirectories>
+        $(MSBuildThisFileDirectory)..\..\include;
+        %(AdditionalIncludeDirectories)
+      </AdditionalIncludeDirectories>
+    </ClCompile>
+
+    <Link>
+      <!-- Static .lib files are in "lib\native" -->
+      <AdditionalDependencies>
+        $(MSBuildThisFileDirectory)..\..\lib\native\$(Ixp-Platform)\Microsoft.Internal.FrameworkUdk.lib;
+        %(AdditionalDependencies)
+      </AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+</Project>

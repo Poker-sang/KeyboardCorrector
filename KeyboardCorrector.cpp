@@ -158,12 +158,12 @@ LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPreINstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
-	//安装键盘钩子
+	//瀹夎閿洏閽╁瓙
 	installDvorakKB();
 	keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, &KeyboardProc, hInstance, NULL);
 	if (keyboardHook == nullptr)
 		return 1;
-	//进行事件循环
+	//杩涜浜嬩欢寰幆
 	MSG msg;
 	while (GetMessage(&msg, nullptr, 0, 0))
 	{
