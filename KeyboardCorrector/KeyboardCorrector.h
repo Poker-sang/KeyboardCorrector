@@ -45,6 +45,7 @@ BYTE QwertyKb[KeysCount] = {
 	'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', _21, _22, _23,
 	'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', _31, _32,
 	'Z', 'X', 'C', 'V', 'B', 'N', 'M', _41, _42, _43 };
+
 /// <summary>
 /// 德沃夏克键盘（序号1）
 /// </summary>
@@ -73,12 +74,12 @@ inline auto IsKeyPressed(const int nVirtualKey) { return (WindowImport::GetKeySt
 inline auto Kbe(const int index) { WindowImport::keybd_event(KeyboardLayoutList[KeyboardLayoutIndex][index], 0, 0x0000, 1 << 24); }
 
 /// <summary>
-/// 键盘钩子处理
+/// 键盘钩子处理程序
 /// </summary>
 inline LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
 	const auto p = reinterpret_cast<PKBDLLHOOKSTRUCT>(lParam);
-	bool handled = false;
+	auto handled = false;
 	if (wParam == WM_KEYDOWN)
 		if (p->dwExtraInfo != 1 << 24 &&
 			!IsKeyPressed(VK_CONTROL) &&
