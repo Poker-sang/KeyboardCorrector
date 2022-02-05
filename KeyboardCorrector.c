@@ -19,7 +19,6 @@
 // 键盘钩子
 static HHOOK keyboardHook = NULL;
 
-
 // Qwerty键盘（序号0）
 BYTE QwertyKb[KeysCount] = {
 	_11, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', _12, _13,
@@ -76,13 +75,12 @@ LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPreINstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
 	//安装键盘钩子
-	installDvorakKB();
 	keyboardHook = SetWindowsHookExW(WH_KEYBOARD_LL, &KeyboardProc, hInstance, NULL);
 	if (keyboardHook == NULL)
 		return 1;
 	//进行事件循环
 	MSG msg;
-	while (GetMessageA(&msg, nullptr, 0, 0))
+	while (GetMessageA(&msg, NULL, 0, 0))
 	{
 		TranslateMessage(&msg);
 		DispatchMessageA(&msg);
