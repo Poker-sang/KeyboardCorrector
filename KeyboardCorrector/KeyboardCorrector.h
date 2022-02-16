@@ -2,7 +2,7 @@
 #include <vector>
 #include <Windows.h>
 
-namespace WindowImport
+namespace WindowsImport
 {
 	using namespace System::Runtime::InteropServices;
 #define DLL_IMPORT [DllImport("user32", CharSet = CharSet::Ansi)] extern
@@ -14,11 +14,11 @@ namespace WindowImport
 }
 
 /// <summary>
-/// ¿É±à¼­µÄ¼ü×ÜÊı
+/// å¯ç¼–è¾‘çš„é”®æ€»æ•°
 /// </summary>
 constexpr auto KeysCount = 47;
 
-#pragma region Ä³Ğ©¼üÅÌÉÏ·ûºÅµÄĞéÄâ¼ü´úÂë
+#pragma region æŸäº›é”®ç›˜ä¸Šç¬¦å·çš„è™šæ‹Ÿé”®ä»£ç 
 constexpr auto _11 = VK_OEM_3;
 constexpr auto _12 = VK_OEM_MINUS;
 constexpr auto _13 = VK_OEM_PLUS;
@@ -33,12 +33,12 @@ constexpr auto _43 = VK_OEM_2;
 #pragma endregion
 
 /// <summary>
-/// ¼üÅÌ¹³×Ó
+/// é”®ç›˜é’©å­
 /// </summary>
 static HHOOK KeyboardHook = nullptr;
 
 /// <summary>
-/// Qwerty¼üÅÌ£¨ĞòºÅ0£©
+/// Qwertyé”®ç›˜ï¼ˆåºå·0ï¼‰
 /// </summary>
 BYTE QwertyKb[KeysCount] = {
 	_11, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', _12, _13,
@@ -47,7 +47,7 @@ BYTE QwertyKb[KeysCount] = {
 	'Z', 'X', 'C', 'V', 'B', 'N', 'M', _41, _42, _43 };
 
 /// <summary>
-/// µÂÎÖÏÄ¿Ë¼üÅÌ£¨ĞòºÅ1£©
+/// å¾·æ²ƒå¤å…‹é”®ç›˜ï¼ˆåºå·1ï¼‰
 /// </summary>
 BYTE DvorakKb[KeysCount] = {
 	_11, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', _21, _22,
@@ -57,24 +57,24 @@ BYTE DvorakKb[KeysCount] = {
 std::vector<BYTE*> KeyboardLayoutList{ QwertyKb, DvorakKb };
 
 /// <summary>
-/// Ä¿Ç°Ñ¡ÔñµÄ¼üÅÌĞòºÅ
+/// ç›®å‰é€‰æ‹©çš„é”®ç›˜åºå·
 /// </summary>
 auto KeyboardLayoutIndex = 0;
 
 /// <summary>
-/// Ä³¼üÊÇ·ñ±»°´ÏÂ
+/// æŸé”®æ˜¯å¦è¢«æŒ‰ä¸‹
 /// </summary>
-///	<param name="nVirtualKey">ĞèÅĞ¶ÏµÄ¼ü</param>
+///	<param name="nVirtualKey">éœ€åˆ¤æ–­çš„é”®</param>
 inline auto IsKeyPressed(const int nVirtualKey) { return (WindowImport::GetKeyState(nVirtualKey) & (1 << (sizeof(SHORT) * 8 - 1))) != 0; }
 
 /// <summary>
-/// ·¢ËÍ¼üÅÌÊÂ¼ş 
+/// å‘é€é”®ç›˜äº‹ä»¶ 
 /// </summary>
-///	<param name="index">·¢ËÍµÄ¼ü¶ÔÓ¦ÔÚÊı×éÀïµÄĞòºÅ</param>
+///	<param name="index">å‘é€çš„é”®å¯¹åº”åœ¨æ•°ç»„é‡Œçš„åºå·</param>
 inline auto Kbe(const int index) { WindowImport::keybd_event(KeyboardLayoutList[KeyboardLayoutIndex][index], 0, 0x0000, 1 << 24); }
 
 /// <summary>
-/// ¼üÅÌ¹³×Ó´¦Àí³ÌĞò
+/// é”®ç›˜é’©å­å¤„ç†ç¨‹åº
 /// </summary>
 inline LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
