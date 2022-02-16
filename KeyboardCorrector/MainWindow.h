@@ -10,15 +10,15 @@ namespace KeyboardCorrector
 	using namespace Drawing;
 
 	/// <summary>
-	/// MainWindow ÕªÒª
+	/// MainWindow æ‘˜è¦
 	/// </summary>
 	public ref class MainWindow sealed : public Window
 	{
 	public:
 		MainWindow()
 		{
-			_keyBoardLayoutNames->Add(L"QWERTY¼üÅÌ");
-			_keyBoardLayoutNames->Add(L"µÂÎÖÏÄ¿Ë¼üÅÌ");
+			_keyBoardLayoutNames->Add(L"QWERTYé”®ç›˜");
+			_keyBoardLayoutNames->Add(L"å¾·æ²ƒå¤å…‹é”®ç›˜");
 
 			InitializeComponent();
 		}
@@ -27,7 +27,7 @@ namespace KeyboardCorrector
 
 	private:
 		/// <summary>
-		/// ¿ªÆô¹Ò¹³
+		/// å¼€å¯æŒ‚é’©
 		/// </summary>
 		void ApplyClicked(Object^ sender, RoutedEventArgs^ e)
 		{
@@ -36,19 +36,19 @@ namespace KeyboardCorrector
 			flag = !flag;
 			if (flag)
 			{
-				hook = WindowImport::SetWindowsHookExW(WH_KEYBOARD_LL, &KeyboardProc, GetModuleHandle(nullptr), NULL);
+				hook = WindowsImport::SetWindowsHookExW(WH_KEYBOARD_LL, &KeyboardProc, GetModuleHandle(nullptr), NULL);
 				WindowState = Windows::WindowState::Minimized;
-				_applyButton->Content = L"¹Ø±Õ";
+				_applyButton->Content = L"å…³é—­";
 			}
 			else
 			{
-				_applyButton->Content = L"¿ªÆô";
+				_applyButton->Content = L"å¼€å¯";
 				if (hook != nullptr)
 					WindowImport::UnhookWindowsHookEx(hook);
 			}
 		}
 		/// <summary>
-		/// Ìí¼Ó¼üÅÌ²¼¾Ö
+		/// æ·»åŠ é”®ç›˜å¸ƒå±€
 		/// </summary>
 		void AddClicked(Object^ sender, RoutedEventArgs^ e)
 		{
@@ -58,37 +58,37 @@ namespace KeyboardCorrector
 			for (auto i = 0; i < KeysCount; ++i)
 				newLayout[i] = safe_cast<Int32>(_keys[i]->Tag);
 			KeyboardLayoutList.push_back(newLayout);
-			_keyBoardLayoutNames->Add(L"ĞÂ¼üÅÌ" + (_keyBoardLayoutNames->Count - 1));
+			_keyBoardLayoutNames->Add(L"æ–°é”®ç›˜" + (_keyBoardLayoutNames->Count - 1));
 			_comboBox->SelectedIndex = _keyBoardLayoutNames->Count - 1;
 
 		}
 		/// <summary>
-		/// É¾³ı¼üÅÌ²¼¾Ö
+		/// åˆ é™¤é”®ç›˜å¸ƒå±€
 		/// </summary>
 		void DeleteClicked(Object^ sender, RoutedEventArgs^ e)
 		{
 			if (KeyboardLayoutIndex == 0)
-				MessageBox::Show(L"ÎŞ·¨É¾³ı" + _keyBoardLayoutNames[KeyboardLayoutIndex], L"ÌáÊ¾", MessageBoxButton::OK, MessageBoxImage::Information);
-			else if(MessageBoxResult::Yes == MessageBox::Show(L"ÊÇ·ñÉ¾³ı" + _keyBoardLayoutNames[KeyboardLayoutIndex], L"¾¯¸æ", MessageBoxButton::YesNo, MessageBoxImage::Warning, MessageBoxResult::No))
+				MessageBox::Show(L"æ— æ³•åˆ é™¤" + _keyBoardLayoutNames[KeyboardLayoutIndex], L"æç¤º", MessageBoxButton::OK, MessageBoxImage::Information);
+			else if(MessageBoxResult::Yes == MessageBox::Show(L"æ˜¯å¦åˆ é™¤" + _keyBoardLayoutNames[KeyboardLayoutIndex], L"è­¦å‘Š", MessageBoxButton::YesNo, MessageBoxImage::Warning, MessageBoxResult::No))
 			{
 				KeyboardLayoutList.erase(KeyboardLayoutList.begin() + KeyboardLayoutIndex);
 				_keyBoardLayoutNames->RemoveAt(KeyboardLayoutIndex);
 			}
 		}
 		/// <summary>
-		/// ÉÏ´Î±»µã»÷µÄ°´¼ü
+		/// ä¸Šæ¬¡è¢«ç‚¹å‡»çš„æŒ‰é”®
 		/// </summary>
 		Button^ _lastSelectedButton;
-#pragma region Ô­À´µÄ°´Å¥ÑùÊ½
+#pragma region åŸæ¥çš„æŒ‰é’®æ ·å¼
 		Windows::Media::Brush^ _originalBackground;
 		Windows::Media::Brush^ _originalBorderBrush;
 #pragma endregion
-#pragma region ±»Ñ¡ÖĞµÄ°´Å¥ÑùÊ½
+#pragma region è¢«é€‰ä¸­çš„æŒ‰é’®æ ·å¼
 		Windows::Media::Brush^ _selectedBackground = new Windows::Media::SolidColorBrush(Windows::Media::Color::FromRgb(190, 230, 253));
 		Windows::Media::Brush^ _selectedBorderBrush = new Windows::Media::SolidColorBrush(Windows::Media::Color::FromRgb(60, 127, 177));
 #pragma endregion
 		/// <summary>
-		/// °´¼üÁ½Á½½»»»
+		/// æŒ‰é”®ä¸¤ä¸¤äº¤æ¢
 		/// </summary>
 		void KeyClicked(Object^ sender, RoutedEventArgs^ e)
 		{
@@ -116,7 +116,7 @@ namespace KeyboardCorrector
 		}
 
 		/// <summary>
-		/// Ñ¡ÔñÒÑÓĞ²¼¾Ö·½°¸
+		/// é€‰æ‹©å·²æœ‰å¸ƒå±€æ–¹æ¡ˆ
 		/// </summary>
 		void SelectionChanged(Object^ sender, SelectionChangedEventArgs^ e)
 		{
@@ -148,11 +148,11 @@ namespace KeyboardCorrector
 		}
 
 		/// <summary>
-		/// ËùÓĞ¼üÅÌµÄViewModel
+		/// æ‰€æœ‰é”®ç›˜çš„ViewModel
 		/// </summary>
 		ObjectModel::ObservableCollection<String^>^ _keyBoardLayoutNames = new ObjectModel::ObservableCollection<String^>();
 
-#pragma region ¿Ø¼ş
+#pragma region æ§ä»¶
 		DockPanel^	_root			= new DockPanel();
 
 		DockPanel^	_dockPanel		= new DockPanel();
@@ -171,7 +171,7 @@ namespace KeyboardCorrector
 #pragma endregion
 
 		/// <summary>
-		/// ¼ÓÔØ´°¿Ú
+		/// åŠ è½½çª—å£
 		/// </summary>
 		void InitializeComponent()
 		{
@@ -184,7 +184,7 @@ namespace KeyboardCorrector
 		}
 
 		/// <summary>
-		/// ¼ÓÔØ¿Ø¼ş
+		/// åŠ è½½æ§ä»¶
 		/// </summary>
 		void InitializeControls()
 		{
@@ -205,7 +205,7 @@ namespace KeyboardCorrector
 				{
 					DockPanel::SetDock(_applyButton, Dock::Left);
 					_applyButton->Width = 70;
-					_applyButton->Content = L"¿ªÆô";
+					_applyButton->Content = L"å¼€å¯";
 					_applyButton->Click += new RoutedEventHandler(this, &MainWindow::ApplyClicked);
 					_originalBackground = _applyButton->Background;
 					_originalBorderBrush = _applyButton->BorderBrush;
@@ -224,13 +224,13 @@ namespace KeyboardCorrector
 
 					DockPanel::SetDock(_deleteButton, Dock::Right);
 					_deleteButton->Width = 70;
-					_deleteButton->Content = L"É¾³ı´Ë²¼¾Ö";
+					_deleteButton->Content = L"åˆ é™¤æ­¤å¸ƒå±€";
 					_deleteButton->Click += new RoutedEventHandler(this, &MainWindow::DeleteClicked);
 					_deleteButton->Margin = Thickness(10, 0, 10, 0);
 
 					DockPanel::SetDock(_addButton, Dock::Right);
 					_addButton->Width = 70;
-					_addButton->Content = L"±£´æ´Ë²¼¾Ö";
+					_addButton->Content = L"ä¿å­˜æ­¤å¸ƒå±€";
 					_addButton->Click += new RoutedEventHandler(this, &MainWindow::AddClicked);
 				}
 				constexpr auto size = 30;
@@ -253,7 +253,7 @@ namespace KeyboardCorrector
 				}
 				_otherKeys[0]->Margin = Thickness(padding, 0, 0, 0);
 				_otherKeys[0]->Width = 2 * size;
-				_otherKeys[0]->Content = L"¡û";
+				_otherKeys[0]->Content = L"â†";
 				_otherKeys[1]->Width = 1.5 * size;
 				_otherKeys[1]->Content = L"Tab";
 				_otherKeys[2]->Width = 2 * size;
