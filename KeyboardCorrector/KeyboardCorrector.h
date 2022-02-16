@@ -65,13 +65,13 @@ auto KeyboardLayoutIndex = 0;
 /// 某键是否被按下
 /// </summary>
 ///	<param name="nVirtualKey">需判断的键</param>
-inline auto IsKeyPressed(const int nVirtualKey) { return (WindowImport::GetKeyState(nVirtualKey) & (1 << (sizeof(SHORT) * 8 - 1))) != 0; }
+inline auto IsKeyPressed(const int nVirtualKey) { return (WindowsImport::GetKeyState(nVirtualKey) & (1 << (sizeof(SHORT) * 8 - 1))) != 0; }
 
 /// <summary>
 /// 发送键盘事件 
 /// </summary>
 ///	<param name="index">发送的键对应在数组里的序号</param>
-inline auto Kbe(const int index) { WindowImport::keybd_event(KeyboardLayoutList[KeyboardLayoutIndex][index], 0, 0x0000, 1 << 24); }
+inline auto Kbe(const int index) { WindowsImport::keybd_event(KeyboardLayoutList[KeyboardLayoutIndex][index], 0, 0x0000, 1 << 24); }
 
 /// <summary>
 /// 键盘钩子处理程序
@@ -95,5 +95,5 @@ inline LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 				}
 	if (handled)
 		return 1;
-	return WindowImport::CallNextHookEx(KeyboardHook, nCode, wParam, lParam);
+	return WindowsImport::CallNextHookEx(KeyboardHook, nCode, wParam, lParam);
 }
