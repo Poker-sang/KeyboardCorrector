@@ -2,16 +2,18 @@
 #include <vector>
 #include <Windows.h>
 
-namespace WindowsImport
+using namespace System::Runtime::InteropServices;
+
+public ref class PInvoke
 {
-	using namespace System::Runtime::InteropServices;
-#define DLL_IMPORT [DllImport("user32", CharSet = CharSet::Ansi)] extern
+public:
+#define DLL_IMPORT [DllImport("user32", CharSet = CharSet::Ansi)] static
 	DLL_IMPORT void keybd_event(BYTE bVk, BYTE bScan, DWORD dwFlags, ULONG_PTR dwExtraInfo);
 	DLL_IMPORT SHORT GetKeyState(int nVirtKey);
 	DLL_IMPORT LRESULT CallNextHookEx(HHOOK hhk, int nCode, WPARAM wParam, LPARAM lParam);
 	DLL_IMPORT HHOOK SetWindowsHookExW(int idHook, HOOKPROC lpfn, HINSTANCE hmod, DWORD dwThreadId);
 	DLL_IMPORT BOOL UnhookWindowsHookEx(HHOOK hhk);
-}
+};
 
 /// <summary>
 /// 可编辑的键总数
@@ -65,13 +67,14 @@ auto KeyboardLayoutIndex = 0;
 /// 某键是否被按下
 /// </summary>
 ///	<param name="nVirtualKey">需判断的键</param>
-inline auto IsKeyPressed(const int nVirtualKey) { return (WindowsImport::GetKeyState(nVirtualKey) & (1 << (sizeof(SHORT) * 8 - 1))) != 0; }
+;
+inline auto IsKeyPressed(const int nVirtualKey) { return (PInvoke::GetKeyState(nVirtualKey) & 1 << sizeof(SHORT) * 8 - 1) != 0; }
 
 /// <summary>
 /// 发送键盘事件 
 /// </summary>
 ///	<param name="index">发送的键对应在数组里的序号</param>
-inline auto Kbe(const int index) { WindowsImport::keybd_event(KeyboardLayoutList[KeyboardLayoutIndex][index], 0, 0x0000, 1 << 24); }
+inline auto Kbe(const int index) { PInvoke::keybd_event(KeyboardLayoutList[KeyboardLayoutIndex][index], 0, 0x0000, 1 << 24); }
 
 /// <summary>
 /// 键盘钩子处理程序
@@ -95,5 +98,5 @@ inline LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 				}
 	if (handled)
 		return 1;
-	return WindowsImport::CallNextHookEx(KeyboardHook, nCode, wParam, lParam);
+	return PInvoke::CallNextHookEx(KeyboardHook, nCode, wParam, lParam);
 }

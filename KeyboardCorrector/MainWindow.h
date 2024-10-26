@@ -1,4 +1,5 @@
 #pragma once
+#include "KeyboardCorrector.h"
 namespace KeyboardCorrector 
 {
 	using namespace System;
@@ -36,7 +37,7 @@ namespace KeyboardCorrector
 			flag = !flag;
 			if (flag)
 			{
-				hook = WindowsImport::SetWindowsHookExW(WH_KEYBOARD_LL, &KeyboardProc, GetModuleHandle(nullptr), NULL);
+				hook = PInvoke::SetWindowsHookExW(WH_KEYBOARD_LL, &KeyboardProc, GetModuleHandle(nullptr), NULL);
 				WindowState = Windows::WindowState::Minimized;
 				_applyButton->Content = L"关闭";
 			}
@@ -44,7 +45,7 @@ namespace KeyboardCorrector
 			{
 				_applyButton->Content = L"开启";
 				if (hook != nullptr)
-					WindowImport::UnhookWindowsHookEx(hook);
+					PInvoke::UnhookWindowsHookEx(hook);
 			}
 		}
 		/// <summary>
@@ -69,7 +70,7 @@ namespace KeyboardCorrector
 		{
 			if (KeyboardLayoutIndex == 0)
 				MessageBox::Show(L"无法删除" + _keyBoardLayoutNames[KeyboardLayoutIndex], L"提示", MessageBoxButton::OK, MessageBoxImage::Information);
-			else if(MessageBoxResult::Yes == MessageBox::Show(L"是否删除" + _keyBoardLayoutNames[KeyboardLayoutIndex], L"警告", MessageBoxButton::YesNo, MessageBoxImage::Warning, MessageBoxResult::No))
+			else if (MessageBoxResult::Yes == MessageBox::Show(L"是否删除" + _keyBoardLayoutNames[KeyboardLayoutIndex], L"警告", MessageBoxButton::YesNo, MessageBoxImage::Warning, MessageBoxResult::No))
 			{
 				KeyboardLayoutList.erase(KeyboardLayoutList.begin() + KeyboardLayoutIndex);
 				_keyBoardLayoutNames->RemoveAt(KeyboardLayoutIndex);
